@@ -13,9 +13,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,7 +29,7 @@ import com.veve.flowreader.model.BooksCollection;
 import com.veve.flowreader.model.DevicePageContext;
 import com.veve.flowreader.model.impl.DevicePageContextImpl;
 
-public class PageActivity extends AppCompatActivity {
+public class PageActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView pager;
 
@@ -35,6 +38,15 @@ public class PageActivity extends AppCompatActivity {
     AppBarLayout bar;
 
     CoordinatorLayout topLayout;
+
+    DevicePageContext pageContext;
+
+    TestListAdapter pageAdapter;
+
+    @Override
+    public void onClick(View v) {
+        Log.i(getClass().getName(), "Button clicked");
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -70,6 +82,7 @@ public class PageActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (bar.getVisibility() == View.VISIBLE) {
                     bar.setVisibility(View.GONE);
+                    bar.setMinimumHeight(0);
                     setSupportActionBar(null);
                 } else {
                     bar.setVisibility(View.VISIBLE);
@@ -90,9 +103,9 @@ public class PageActivity extends AppCompatActivity {
             public void onGlobalLayout() {
                 Log.i("tag", ""+recyclerView.getWidth());
                 if (recyclerView.getAdapter() == null) {
-                    recyclerView.setAdapter(
-                            new PageActivity.TestListAdapter(
-                                    new DevicePageContextImpl(recyclerView.getWidth())));
+                    pageContext = new DevicePageContextImpl(recyclerView.getWidth());
+                    pageAdapter = new TestListAdapter(pageContext);
+                    recyclerView.setAdapter(pageAdapter);
                 }
             }
         });
@@ -121,8 +134,8 @@ public class PageActivity extends AppCompatActivity {
         DevicePageContext context = pageAdapter.getContext();
         switch (item.getItemId()) {
             case R.id.decrease_font: {
-                context.setZoom(0.8f*context.getZoom());
-                pageAdapter.notifyDataSetChanged();
+                pageContext.setZoom(0.8f*pageContext.getZoom());
+                PageActivity.this.pageAdapter.notifyDataSetChanged();
                 break;
             }
             case R.id.increase_font: {
@@ -151,7 +164,43 @@ public class PageActivity extends AppCompatActivity {
                 break;
             }
         }
+
+//
+//        Button button = findViewById(R.id.button);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.i(getClass().getName(), "Button clicked");
+//            }
+//        });
+//
+//        ImageButton largerTextButton = findViewById(R.id.larger_text);
+//        largerTextButton.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Log.i(getClass().getName(), "Larger Text button touched");
+//                return false;
+//            }
+//        });
+//        largerTextButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Log.i(getClass().getName(), "Larger Text button clicked");
+//                pageContext.setZoom(1.25f*pageContext.getZoom());
+//                PageActivity.this.pageAdapter.notifyDataSetChanged();
+//            }
+//        });
+        ImageButton smallerTextButton = findViewById(R.id.smaller_text);
+        smallerTextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageContext.setZoom(0.8f*pageContext.getZoom());
+                PageActivity.this.pageAdapter.notifyDataSetChanged();
+            }
+        });
+
         return true;
+
     }
 
     public void setPageNumber(int pageNumber, int totalPages) {
