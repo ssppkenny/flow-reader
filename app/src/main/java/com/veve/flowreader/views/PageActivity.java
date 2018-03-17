@@ -12,12 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,10 +36,6 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
     AppBarLayout bar;
 
     CoordinatorLayout topLayout;
-
-    DevicePageContext pageContext;
-
-    TestListAdapter pageAdapter;
 
     @Override
     public void onClick(View v) {
@@ -90,9 +84,6 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
                 topLayout.requestLayout();
                 topLayout.forceLayout();
                 topLayout.invalidate();
-                //topLayout.onInvalidate();
-                //setContentView(R.layout.activity_page);
-
             }
         });
 
@@ -101,11 +92,33 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                Log.i("tag", ""+recyclerView.getWidth());
+                Log.i("tag", "" + recyclerView.getWidth());
                 if (recyclerView.getAdapter() == null) {
-                    pageContext = new DevicePageContextImpl(recyclerView.getWidth());
-                    pageAdapter = new TestListAdapter(pageContext);
+
+                    DevicePageContext pageContext = new DevicePageContextImpl(recyclerView.getWidth());
+                    PageListAdapter pageAdapter = new PageListAdapter(pageContext);
                     recyclerView.setAdapter(pageAdapter);
+
+                    PageMenuListener pageMenuListener = new PageMenuListener();
+
+                    ImageButton smallerTextButton = findViewById(R.id.smaller_text);
+                    smallerTextButton.setOnClickListener(pageMenuListener);
+
+                    ImageButton largerTextButton = findViewById(R.id.larger_text);
+                    largerTextButton.setOnClickListener(pageMenuListener);
+
+                    ImageButton smallerKerningButton = findViewById(R.id.smaller_kerning);
+                    smallerKerningButton.setOnClickListener(pageMenuListener);
+
+                    ImageButton largerKerningButton = findViewById(R.id.larger_kerning);
+                    largerKerningButton.setOnClickListener(pageMenuListener);
+
+                    ImageButton smallerLeadingButton = findViewById(R.id.smaller_leading);
+                    smallerLeadingButton.setOnClickListener(pageMenuListener);
+
+                    ImageButton largerLeadingButton = findViewById(R.id.larger_leading);
+                    largerLeadingButton.setOnClickListener(pageMenuListener);
+
                 }
             }
         });
@@ -127,94 +140,61 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        final RecyclerView recyclerView = findViewById(R.id.list);
-        PageActivity.TestListAdapter pageAdapter = (PageActivity.TestListAdapter)recyclerView.getAdapter();
-        DevicePageContext context = pageAdapter.getContext();
-        switch (item.getItemId()) {
-            case R.id.decrease_font: {
-                pageContext.setZoom(0.8f*pageContext.getZoom());
-                PageActivity.this.pageAdapter.notifyDataSetChanged();
-                break;
-            }
-            case R.id.increase_font: {
-                context.setZoom(1.25f*context.getZoom());
-                pageAdapter.notifyDataSetChanged();
-                break;
-            }
-            case R.id.decrease_kerning: {
-                context.setKerning(0.8f*context.getKerning());
-                pageAdapter.notifyDataSetChanged();
-                break;
-            }
-            case R.id.increase_kerning: {
-                context.setKerning(1.25f*context.getKerning());
-                pageAdapter.notifyDataSetChanged();
-                break;
-            }
-            case R.id.decrease_leading: {
-                context.setLeading(0.8f*context.getLeading());
-                pageAdapter.notifyDataSetChanged();
-                break;
-            }
-            case R.id.increase_leading: {
-                context.setLeading(1.25f*context.getLeading());
-                pageAdapter.notifyDataSetChanged();
-                break;
-            }
-        }
-
-//
-//        Button button = findViewById(R.id.button);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.i(getClass().getName(), "Button clicked");
-//            }
-//        });
-//
-//        ImageButton largerTextButton = findViewById(R.id.larger_text);
-//        largerTextButton.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                Log.i(getClass().getName(), "Larger Text button touched");
-//                return false;
-//            }
-//        });
-//        largerTextButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.i(getClass().getName(), "Larger Text button clicked");
-//                pageContext.setZoom(1.25f*pageContext.getZoom());
-//                PageActivity.this.pageAdapter.notifyDataSetChanged();
-//            }
-//        });
-        ImageButton smallerTextButton = findViewById(R.id.smaller_text);
-        smallerTextButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pageContext.setZoom(0.8f*pageContext.getZoom());
-                PageActivity.this.pageAdapter.notifyDataSetChanged();
-            }
-        });
-
-        return true;
-
-    }
-
     public void setPageNumber(int pageNumber, int totalPages) {
         pager.setText(String.format("Page #%d of %d", pageNumber + 1, totalPages));
     }
 
+    class PageMenuListener implements OnClickListener {
+        final RecyclerView recyclerView = findViewById(R.id.list);
+        PageActivity.PageListAdapter pageAdapter =
+                (PageActivity.PageListAdapter) recyclerView.getAdapter();
+        DevicePageContext context = pageAdapter.getContext();
 
-    class TestListAdapter extends RecyclerView.Adapter {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.smaller_text: {
+                    context.setZoom(0.8f * context.getZoom());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case R.id.larger_text: {
+                    context.setZoom(1.25f * context.getZoom());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case R.id.smaller_kerning: {
+                    context.setKerning(0.8f * context.getKerning());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case R.id.larger_kerning: {
+                    context.setKerning(1.25f * context.getKerning());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case R.id.smaller_leading: {
+                    context.setLeading(0.8f * context.getLeading());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+                case R.id.larger_leading: {
+                    context.setLeading(1.25f * context.getLeading());
+                    pageAdapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
+
+
+    class PageListAdapter extends RecyclerView.Adapter {
 
         Book book;
 
         DevicePageContext context;
 
-        public TestListAdapter(DevicePageContext context) {
+        public PageListAdapter(DevicePageContext context) {
             this.book = BooksCollection.getInstance().getBooks().get(0);
             this.context = context;
         }
@@ -236,7 +216,7 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
             Log.d(getClass().getName(), String.format("onBindViewHolder #%d", position));
             BookPage bookPage = book.getPage(position);
             Bitmap bitmap = bookPage.getAsBitmap(context);
-            ((ImageView)holder.itemView).setImageBitmap(bitmap);
+            ((ImageView) holder.itemView).setImageBitmap(bitmap);
         }
 
         @Override
