@@ -11,5 +11,6 @@ branches:
   - master
   - FLOW-UI
 before_script:
+  - emulator -list-avds
   - emulator -avd android-26 -no-skin -no-audio -no-window &
   - android-wait-for-emulator
