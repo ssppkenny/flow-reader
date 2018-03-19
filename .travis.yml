@@ -11,6 +11,6 @@ branches:
   - master
   - FLOW-UI
 before_script:
-  - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"21 --abi google_apis/armeabi-v7a
+  - android list target
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
