@@ -1,4 +1,7 @@
-language: java
+language: android
+android:
+  components:
+  - android-26
 before_install:
  - chmod +x gradlew
 branches:
