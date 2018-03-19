@@ -11,6 +11,7 @@ branches:
   - master
   - FLOW-UI
 before_script:
+  - android list targets
   - android -v create avd -n test -t android-22
   - emulator -avd test -no-skin -no-audio -no-window -gpu off -no-boot-anim &
   - android-wait-for-emulator
