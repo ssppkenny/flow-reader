@@ -27,6 +27,10 @@ public class BooksCollection {
         //How to read config from memory?
         //So far there will be fake books list
         bookCollection.addBook(new MockRasterBook());
+        bookCollection.addBook(new MockRasterBook());
+        bookCollection.addBook(new MockRasterBook());
+        bookCollection.addBook(new MockRasterBook());
+        bookCollection.addBook(new MockRasterBook());
     }
 
     public static BooksCollection getInstance() {

@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -57,10 +58,9 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
         bar = findViewById(R.id.bar);
         topLayout = findViewById(R.id.topLayout);
         setSupportActionBar(toolbar);
-
         pager = findViewById(R.id.pager);
-
         FloatingActionButton home = findViewById(R.id.home);
+
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,6 +71,7 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         FloatingActionButton show = findViewById(R.id.show);
+
         show.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -88,7 +89,9 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         final RecyclerView recyclerView = findViewById(R.id.list);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+
         recyclerView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -123,6 +126,7 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
@@ -137,6 +141,41 @@ public class PageActivity extends AppCompatActivity implements View.OnClickListe
                 Log.i(getClass().getName(), String.format("%S %d %d", recyclerView.toString(), dx, dy));
             }
         });
+
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final RecyclerView recyclerView = findViewById(R.id.list);
+        PageActivity.PageListAdapter pageAdapter =
+                (PageActivity.PageListAdapter) recyclerView.getAdapter();
+        DevicePageContext context = pageAdapter.getContext();
+        switch (item.getItemId()) {
+            case R.id.no_margins: {
+                context.setMargin(0);
+                pageAdapter.notifyDataSetChanged();
+                break;
+            }
+            case R.id.narrow_margins: {
+                context.setMargin(25);
+                pageAdapter.notifyDataSetChanged();
+                break;
+            }
+            case R.id.normal_margins: {
+                context.setMargin(50);
+                pageAdapter.notifyDataSetChanged();
+                break;
+            }
+            case R.id.wide_margins: {
+                context.setMargin(100);
+                pageAdapter.notifyDataSetChanged();
+                break;
+            }
+        }
+
+        return true;
 
     }
 
