@@ -13,4 +13,4 @@ branches:
 before_script:
   - android list sdk --extended --no-ui --all
   - echo "y" | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-22,sys-img-x86_64-android-22
-  - echo "n" | android create avd --name myandroid22 -t "android-22"
+  - echo "n" | android create avd --name myandroid22 -t "android-22" --abi "default/x86_64"
