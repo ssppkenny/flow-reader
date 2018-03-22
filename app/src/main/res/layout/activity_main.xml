@@ -25,8 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:src="@drawable/ic_books_list"
-            style="?android:attr/borderlessButtonStyle"
-            />
+            style="?android:attr/borderlessButtonStyle"/>
 
         <android.widget.ImageButton
             android:id="@+id/books_grid"
@@ -34,8 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:src="@drawable/ic_books_grid"
-            style="?android:attr/borderlessButtonStyle"
-            />
+            style="?android:attr/borderlessButtonStyle"/>
 
         </android.support.v7.widget.Toolbar>
 
@@ -51,62 +49,16 @@
         tools:context="com.veve.flowreader.views.MainActivity"
         tools:showIn="@layout/activity_main">
 
-        <!--<ListView-->
-            <!--android:id="@android:id/list"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:headerDividersEnabled="false" />-->
-
         <android.widget.GridView xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/grid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#eeddff"
-            android:numColumns="4"
+            android:numColumns="3"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:context="org.studies.android.activities.GridLayoutActivity">
-
-            <!--<TextView-->
-                <!--android:layout_columnWeight="1"-->
-                <!--android:layout_width="24px"-->
-                <!--android:layout_height="204px"-->
-                <!--android:background="#f4c"-->
-                <!--android:text="C" />-->
-
-            <!--<TextView-->
-                <!--android:layout_columnWeight="1"-->
-                <!--android:layout_width="24px"-->
-                <!--android:layout_height="204px"-->
-                <!--android:background="#cd3"-->
-                <!--android:text="A" />-->
-
-            <!--<TextView-->
-                <!--android:layout_columnWeight="1"-->
-                <!--android:layout_width="24px"-->
-                <!--android:layout_height="204px"-->
-                <!--android:background="#123"-->
-                <!--android:text="B" />-->
-
-            <!--<TextView-->
-                <!--android:layout_columnWeight="1"-->
-                <!--android:layout_width="24px"-->
-                <!--android:layout_height="204px"-->
-                <!--android:background="#1e6"-->
-                <!--android:text="C" />-->
-
-            <!--<TextView-->
-                <!--android:layout_columnWeight="1"-->
-                <!--android:layout_width="24px"-->
-                <!--android:layout_height="204px"-->
-                <!--android:background="#e4b"-->
-                <!--android:text="A" />-->
-
-
-        </android.widget.GridView>
-
-
+            android:background="#ffffff"
+            tools:context="org.studies.android.activities.GridLayoutActivity"/>
 
     </android.support.constraint.ConstraintLayout>
 

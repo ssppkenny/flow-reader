@@ -1,12 +1,14 @@
 package com.veve.flowreader.views;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     BookListAdapter bookListAdapter = new BookListAdapter();
+
     BookGridAdapter bookGridAdapter = new BookGridAdapter();
 
     @Override
@@ -51,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         final GridView gridView = findViewById(R.id.grid);
-        gridView.setAdapter(bookListAdapter);
+        gridView.setAdapter(bookGridAdapter);
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Log.i(getClass().getName(), "Grid View");
-                gridView.setNumColumns(5);
+                gridView.setNumColumns(3);
                 gridView.setAdapter(bookGridAdapter);
             }
         });
@@ -202,10 +205,18 @@ public class MainActivity extends AppCompatActivity {
             if (convertView == null) {
                 convertView = getLayoutInflater().inflate(R.layout.items_list, container, false);
             }
-            TextView textView = (TextView)((ConstraintLayout)convertView).getChildAt(0);
+//            TextView textView = (TextView)((ConstraintLayout)convertView).getChildAt(0);
+//            textView.setText(booksList.get(position).getName());
+//            textView.setWidth(100);
+//            textView.setHeight(100);
+//            textView.setBackgroundColor(Color.parseColor("#77b93c"));
+//            textView.setGravity(Gravity.CENTER);
+//            textView.setTextColor(Color.LTGRAY);
+
+            convertView = getLayoutInflater().inflate(R.layout.book_preview, container, false);
+            TextView textView = convertView.findViewById(R.id.book);
             textView.setText(booksList.get(position).getName());
-            textView.setWidth(200);
-            textView.setHeight(300);
+
             return convertView;
         }
 
