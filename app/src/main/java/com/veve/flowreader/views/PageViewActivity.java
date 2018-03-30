@@ -36,33 +36,45 @@ public class PageViewActivity extends AppCompatActivity {
     private int mPpageNo;
     private ProgressBar spinner;
     private String filename;
+    private Bitmap bmp;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putInt(PAGENO_EXTRA, mPpageNo);
         outState.putString(EXTRA_FILENAME_KEY, filename);
+        outState.putParcelable("bitmap", bmp);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int pageNo = INITIAL_PAGE_NUMBER;
-        if (savedInstanceState != null) {
-            pageNo = savedInstanceState.getInt(PAGENO_EXTRA);
-            Log.d("ROTATE", "contains " + pageNo);
-
-        }
-
-        final AtomicInteger pageNumber = pageNo > INITIAL_PAGE_NUMBER ? new AtomicInteger(pageNo) : new AtomicInteger(INITIAL_PAGE_NUMBER);
+        cache = new SparseArray<Bitmap>();
         setContentView(R.layout.activity_page_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        cache = new SparseArray<Bitmap>();
+        int pageNo = INITIAL_PAGE_NUMBER;
         spinner = findViewById(R.id.progressBar1);
+        iv = findViewById(R.id.page_image);
+
+        if (savedInstanceState != null) {
+            pageNo = savedInstanceState.getInt(PAGENO_EXTRA);
+            Log.d("ROTATE", "contains " + pageNo);
+            bmp = savedInstanceState.getParcelable("bitmap");
+            iv.setImageBitmap(bmp);
+            cache.put(pageNo, bmp);
+            spinner.setVisibility(View.INVISIBLE);
+            iv.setVisibility(View.VISIBLE);
+        }
+
+        final AtomicInteger pageNumber = pageNo > INITIAL_PAGE_NUMBER ? new AtomicInteger(pageNo) : new AtomicInteger(INITIAL_PAGE_NUMBER);
+
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
         spinner.setVisibility(View.VISIBLE);
 
         String newString = getStringExtra(savedInstanceState);
@@ -71,7 +83,7 @@ public class PageViewActivity extends AppCompatActivity {
         final String fileName = newString;
         djvuBook = new DjvuBook(fileName);
         context = new DjvuDevicePageContext();
-        iv = findViewById(R.id.page_image);
+
         iv.setVisibility(View.INVISIBLE);
 
         LoadPageTask loadPageTask = new LoadPageTask();
@@ -149,6 +161,7 @@ public class PageViewActivity extends AppCompatActivity {
             Log.d("ASYNC", "Execution complete");
             fab.setVisibility(View.VISIBLE);
             if (mPpageNo == requestedPageNo) {
+                bmp = bitmap;
                 iv.setImageBitmap(bitmap);
                 spinner.setVisibility(View.INVISIBLE);
                 iv.setVisibility(View.VISIBLE);
