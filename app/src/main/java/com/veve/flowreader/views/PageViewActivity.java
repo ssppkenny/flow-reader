@@ -1,7 +1,6 @@
 package com.veve.flowreader.views;
 
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,7 +10,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -22,8 +20,6 @@ import com.veve.flowreader.model.DevicePageContext;
 import com.veve.flowreader.model.impl.djvu.DjvuBook;
 import com.veve.flowreader.model.impl.djvu.DjvuDevicePageContext;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class PageViewActivity extends AppCompatActivity {
@@ -31,6 +27,7 @@ public class PageViewActivity extends AppCompatActivity {
     private static final String EXTRA_FILENAME_KEY = "filename";
     private static final int INDEX_INCREMENT = 1;
     private static final int INITIAL_PAGE_NUMBER = 1;
+    public static final String PAGENO_EXTRA = "pageno";
     private Book djvuBook;
     private DevicePageContext context;
     private SparseArray<Bitmap> cache;
@@ -38,11 +35,27 @@ public class PageViewActivity extends AppCompatActivity {
     private ImageView iv;
     private int mPpageNo;
     private ProgressBar spinner;
+    private String filename;
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(PAGENO_EXTRA, mPpageNo);
+        outState.putString(EXTRA_FILENAME_KEY, filename);
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        int pageNo = INITIAL_PAGE_NUMBER;
+        if (savedInstanceState != null) {
+            pageNo = savedInstanceState.getInt(PAGENO_EXTRA);
+            Log.d("ROTATE", "contains " + pageNo);
+
+        }
+
+        final AtomicInteger pageNumber = pageNo > INITIAL_PAGE_NUMBER ? new AtomicInteger(pageNo) : new AtomicInteger(INITIAL_PAGE_NUMBER);
         setContentView(R.layout.activity_page_view);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -53,13 +66,13 @@ public class PageViewActivity extends AppCompatActivity {
         spinner.setVisibility(View.VISIBLE);
 
         String newString = getStringExtra(savedInstanceState);
+        filename = newString;
 
         final String fileName = newString;
         djvuBook = new DjvuBook(fileName);
         context = new DjvuDevicePageContext();
         iv = findViewById(R.id.page_image);
         iv.setVisibility(View.INVISIBLE);
-        final AtomicInteger pageNumber = new AtomicInteger(INITIAL_PAGE_NUMBER);
 
         LoadPageTask loadPageTask = new LoadPageTask();
         fab.setVisibility(View.INVISIBLE);
