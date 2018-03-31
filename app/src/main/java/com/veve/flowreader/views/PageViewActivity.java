@@ -12,6 +12,7 @@ import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import java.io.File;
 
 import com.veve.flowreader.R;
 import com.veve.flowreader.model.Book;
@@ -28,6 +29,7 @@ public class PageViewActivity extends AppCompatActivity {
     private static final int INDEX_INCREMENT = 1;
     private static final int INITIAL_PAGE_NUMBER = 1;
     public static final String PAGENO_EXTRA = "pageno";
+    public static final String BITMAP_EXTRA = "bitmap";
     private Book djvuBook;
     private DevicePageContext context;
     private SparseArray<Bitmap> cache;
@@ -63,7 +65,7 @@ public class PageViewActivity extends AppCompatActivity {
         if (savedInstanceState != null) {
             pageNo = savedInstanceState.getInt(PAGENO_EXTRA);
             Log.d("ROTATE", "contains " + pageNo);
-            bmp = savedInstanceState.getParcelable("bitmap");
+            bmp = savedInstanceState.getParcelable(BITMAP_EXTRA);
             iv.setImageBitmap(bmp);
             cache.put(pageNo, bmp);
             spinner.setVisibility(View.INVISIBLE);
@@ -82,6 +84,7 @@ public class PageViewActivity extends AppCompatActivity {
         filename = newString;
 
         final String fileName = newString;
+        setTitle(new File(fileName).getName());
         djvuBook = new DjvuBook(fileName);
         context = new DjvuDevicePageContext();
 
@@ -119,7 +122,7 @@ public class PageViewActivity extends AppCompatActivity {
                 prev.setVisibility(View.INVISIBLE);
                 int pageNo = pageNumber.decrementAndGet();
 
-            
+
                 if (pageNo > 1  ){
 
                     LoadPageTask loadPageTask = new LoadPageTask();
