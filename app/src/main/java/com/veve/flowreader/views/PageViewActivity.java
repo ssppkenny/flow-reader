@@ -119,7 +119,7 @@ public class PageViewActivity extends AppCompatActivity {
                 prev.setVisibility(View.INVISIBLE);
                 int pageNo = pageNumber.decrementAndGet();
 
-                Log.d("click", "prev pageNo =   " + pageNo);
+            
                 if (pageNo > 1  ){
 
                     LoadPageTask loadPageTask = new LoadPageTask();
@@ -167,9 +167,9 @@ public class PageViewActivity extends AppCompatActivity {
             Bitmap bitmap = null;
             int pageNo = pageNumbers[0];
             requestedPageNo = pageNo;
-            Log.d("ASYNC", "Executing async for " + pageNo);
+
             if (cache.get(pageNo) == null) {
-                Log.d("ASYNC", "doesn't contain " + pageNo);
+
                 BookPage page = djvuBook.getPage(pageNo);
 
                 try {
@@ -180,7 +180,7 @@ public class PageViewActivity extends AppCompatActivity {
                     Log.d("ASYNC", "failed  to allocate memory for " + pageNo);
                 }
             } else {
-                Log.d("ASYNC", "contains " + pageNo);
+
                 bitmap = cache.get(pageNo);
             }
 
@@ -190,7 +190,7 @@ public class PageViewActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            Log.d("ASYNC", "Execution complete");
+
             next.setVisibility(View.VISIBLE);
             if (mPageNo > 1) {
                  prev.setVisibility(View.VISIBLE);
