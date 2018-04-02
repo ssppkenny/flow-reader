@@ -30,7 +30,6 @@ public class BooksCollection {
         }
         //How to read config from memory?
         //So far there will be fake books list
-
         //bookCollection.addBook(new MockRasterBook("Book Five"));
         return bookCollection;
     }
