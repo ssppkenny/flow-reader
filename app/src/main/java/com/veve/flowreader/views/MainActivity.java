@@ -36,9 +36,9 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    BookListAdapter bookListAdapter = new BookListAdapter();
+    BookListAdapter bookListAdapter;
 
-    BookGridAdapter bookGridAdapter = new BookGridAdapter();
+    BookGridAdapter bookGridAdapter;
 
     int columnsNumber;
 
@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         preferences = getPreferences(MODE_PRIVATE);
+
+        bookListAdapter = new BookListAdapter();
+
+        bookGridAdapter = new BookGridAdapter();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -170,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
 
         private BookListAdapter() {
             Log.i(this.getClass().getName(), "Constructing BookListAdapter");
-            booksList = BooksCollection.getInstance().getBooks();
+            booksList = BooksCollection.getInstance(getApplicationContext()).getBooks();
             notifyDataSetChanged();
         }
 
@@ -218,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
 
         private BookGridAdapter() {
             Log.i(this.getClass().getName(), "Constructing BookListAdapter");
-            booksList = BooksCollection.getInstance().getBooks();
+            booksList = BooksCollection.getInstance(getApplicationContext()).getBooks();
             notifyDataSetChanged();
         }
 

@@ -15,9 +15,12 @@ public class DjvuBook implements Book {
 
     private long bookId;
 
+    private String path;
+
     private int currentPageNumber = 1;
     public DjvuBook(String path) {
        this.bookId = openBook(path);
+       this.path = path;
     }
 
     private native long openBook(String path);
@@ -52,5 +55,10 @@ public class DjvuBook implements Book {
     @Override
     public long getId() {
         return bookId;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
     }
 }
