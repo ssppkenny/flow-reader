@@ -36,7 +36,17 @@ public class BookStorageImpl implements BookStorage {
 
     @Override
     public List<BookRecord> getBooksList() {
-//        database.execSQL();
+        BookRecordCursorWrapper wrapper = queryBooks(null, null);
+        try {
+            wrapper.moveToFirst();
+            while (!wrapper.isAfterLast()) {
+                books.add(wrapper.getBookRecord());
+                wrapper.moveToNext();
+            }
+        } finally
+        {
+            wrapper.close();
+        }
         return books;
     }
 

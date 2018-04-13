@@ -80,6 +80,9 @@ public class BrowseFilesActivity extends ListActivity {
                         } else {
                             Book newBook = BookFactory.getInstance().createBook(file);
                             BooksCollection.getInstance(getApplicationContext()).addBook(newBook);
+                            Intent ii = new Intent(BrowseFilesActivity.this, PageViewActivity.class);
+//                        ii.putExtra("filename", file.getAbsolutePath());
+                            startActivity(ii);
                         }
                     }
                 } else if (!fileListAdapter.currentFiles.get(i).canRead()) {

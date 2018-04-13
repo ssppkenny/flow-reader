@@ -3,8 +3,10 @@ package com.veve.flowreader.model;
 import android.content.Context;
 
 import com.lizardtech.djvu.DjVmDir;
+import com.veve.flowreader.dao.BookRecord;
 import com.veve.flowreader.dao.BookStorage;
 import com.veve.flowreader.dao.sqlite.BookStorageImpl;
+import com.veve.flowreader.model.impl.djvu.DjvuBook;
 import com.veve.flowreader.model.impl.mockraster.MockRasterBook;
 import com.veve.flowreader.model.impl.mocksimple.MockBook;
 
@@ -18,7 +20,7 @@ import java.util.List;
 
 public class BooksCollection {
 
-    private List<Book> booksList;
+    private static List<Book> booksList;
 
     private static BookStorage bookStorage;
 
@@ -32,10 +34,12 @@ public class BooksCollection {
         if (bookCollection == null) {
             bookCollection = new BooksCollection();
             bookStorage = BookStorageImpl.getInstance(context);
+            List<BookRecord> bookRecords = bookStorage.getBooksList();
+            for (BookRecord bookRecord : bookRecords) {
+                Book storedBook = new DjvuBook(bookRecord.getUrl());
+                booksList.add(storedBook);
+            }
         }
-        //How to read config from memory?
-        //So far there will be fake books list
-        //bookCollection.addBook(new MockRasterBook("Book Five"));
         return bookCollection;
     }
 
@@ -49,6 +53,10 @@ public class BooksCollection {
     }
 
     public boolean hasBook(File bookFile) {
+        for (Book book : booksList) {
+            if (book.getPath().equals(bookFile.getAbsolutePath()))
+                return true;
+        }
         return false;
     }
 
