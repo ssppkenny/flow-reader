@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.veve.flowreader.dao.BookRecord;
 import com.veve.flowreader.dao.BookStorage;
@@ -62,8 +63,14 @@ public class BookStorageImpl implements BookStorage {
         database.beginTransaction();
         ContentValues values = new ContentValues();
         values.put(BookStorageSchema.BookTable.Cols.PATH, book.getPath());
-        database.insert(BookStorageSchema.BookTable.NAME, null, values);
+        long l = database.insert(BookStorageSchema.BookTable.NAME, null, values);
+        Log.i(getClass().getName(), String.format("Inserted row number is %d", l));
         database.endTransaction();
+        Cursor c = database.query("books",null, null, null, null, null, null);
+        c.getString(0);
+        c.getString(1);
+        c.moveToNext();
+        c.getString(1);
     }
 
     private BookRecordCursorWrapper queryBooks(String whereClause, String[] whereArgs) {

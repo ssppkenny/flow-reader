@@ -2,7 +2,6 @@ package com.veve.flowreader.model;
 
 import android.content.Context;
 
-import com.lizardtech.djvu.DjVmDir;
 import com.veve.flowreader.dao.BookRecord;
 import com.veve.flowreader.dao.BookStorage;
 import com.veve.flowreader.dao.sqlite.BookStorageImpl;
